@@ -18,6 +18,7 @@ type
     FCircleSelector: TCircleSelector;
     FRectSelector: TRectSelector;
   public
+    procedure SelectorChange(Sender: TObject; const AColor: TAlphaColor);
   end;
 
 var
@@ -33,7 +34,6 @@ uses
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   var C := $ff000000 or UInt32(Random($ffffff));
-  //Log.d(IntToHex(C, 8));
 
   FCircleSelector.Color := C;
   Image1.Bitmap.Clear(C);
@@ -43,11 +43,13 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   FCircleSelector := TCircleSelector.Create(Self);
   FCircleSelector.Parent := Self;
+  FCircleSelector.OnChange := SelectorChange;
 
   Image1.Bitmap.SetSize(Trunc(Image1.Width), Trunc(Image1.Height));
 
   FRectSelector := TRectSelector.Create(Self);
   FRectSelector.Position.X := 500;
+  FRectSelector.OnChange := SelectorChange;
 
   FRectSelector.Parent := Self;
 
@@ -57,6 +59,12 @@ end;
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
   FCircleSelector.Free;
+end;
+
+procedure TForm1.SelectorChange(Sender: TObject; const AColor: TAlphaColor);
+begin
+  //Log.d(IntToHex(AColor, 8));
+  Image1.Bitmap.Clear(AColor);
 end;
 
 end.

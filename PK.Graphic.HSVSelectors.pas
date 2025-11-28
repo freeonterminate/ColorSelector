@@ -30,13 +30,25 @@ type
     procedure SetSaturation(const AValue: Single);
   protected
     procedure Resize; override;
-    procedure ResizeImpl; virtual;
+    procedure ResizeImpl; virtual; abstract;
+
     procedure CalcColor;
+    procedure SetHSV(const AHue, ASaturation, AValue: Single);
+
     procedure Draw(const ACanvas: TCanvas); override;
     procedure DrawImpl(
       const ACanvas: TCanvas;
-      const AData: TBitmapData); virtual;
-    procedure SetHSV(const AHue, ASaturation, AValue: Single);
+      const AData: TBitmapData); virtual; abstract;
+
+    procedure MouseDown(
+      AButton: TMouseButton;
+      AShift: TShiftState;
+      AX, AY: Single); override;
+    procedure MouseMove(
+      AShift: TShiftState;
+      AX, AY: Single); override;
+
+    procedure MouseEventImpl(const AX, AY: Single); virtual; abstract;
   public
     constructor Create(AOwner: TComponent); override;
     property Hue: Single read FHue write SetHue;
@@ -96,9 +108,7 @@ type
       AButton: TMouseButton;
       AShift: TShiftState;
       AX, AY: Single); override;
-    procedure MouseMove(
-      AShift: TShiftState;
-      AX, AY: Single); override;
+    procedure MouseEventImpl(const AX, AY: Single); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -119,13 +129,7 @@ type
 
     procedure SetColor(const AColor: TAlphaColor); override;
 
-    procedure MouseDown(
-      AButton: TMouseButton;
-      AShift: TShiftState;
-      AX, AY: Single); override;
-    procedure MouseMove(
-      AShift: TShiftState;
-      AX, AY: Single); override;
+    procedure MouseEventImpl(const AX, AY: Single); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -195,11 +199,21 @@ begin
   end;
 end;
 
-procedure THSVSelector.DrawImpl(
-  const ACanvas: TCanvas;
-  const AData: TBitmapData);
+procedure THSVSelector.MouseDown(
+  AButton: TMouseButton;
+  AShift: TShiftState;
+  AX, AY: Single);
 begin
-  // 継承先でセレクタの実装
+  inherited;
+
+  MouseEventImpl(AX, AY);
+end;
+
+procedure THSVSelector.MouseMove(AShift: TShiftState; AX, AY: Single);
+begin
+  inherited;
+
+  MouseEventImpl(AX, AY);
 end;
 
 procedure THSVSelector.Resize;
@@ -208,11 +222,6 @@ begin
 
   ResizeImpl;
   StartDraw;
-end;
-
-procedure THSVSelector.ResizeImpl;
-begin
-  // 継承先で実装
 end;
 
 procedure THSVSelector.SetHSV(const AHue, ASaturation, AValue: Single);
@@ -475,23 +484,14 @@ procedure TCircleSelector.MouseDown(
   AShift: TShiftState;
   AX, AY: Single);
 begin
-  inherited;
-
   FInHueCircle := IsInHueCircle(AX, AY);
-  if FInHueCircle then
-    FHueCursor.MoveTo(AX, AY);
-
   FInSVTriangle := IsInSVTriangle(AX, AY);
-  if FInSVTriangle then
-    FSVCursor.MoveTo(AX, AY);
+
+  inherited;
 end;
 
-procedure TCircleSelector.MouseMove(
-  AShift: TShiftState;
-  AX, AY: Single);
+procedure TCircleSelector.MouseEventImpl(const AX, AY: Single);
 begin
-  inherited;
-
   if not Pressed then
     Exit;
 
@@ -683,23 +683,8 @@ begin
   end;
 end;
 
-procedure TRectSelector.MouseDown(
-  AButton: TMouseButton;
-  AShift: TShiftState;
-  AX, AY: Single);
+procedure TRectSelector.MouseEventImpl(const AX, AY: Single);
 begin
-  inherited;
-
-  if Pressed then
-    FCursor.MoveTo(AX, AY);
-end;
-
-procedure TRectSelector.MouseMove(
-  AShift: TShiftState;
-  AX, AY: Single);
-begin
-  inherited;
-
   if Pressed then
     FCursor.MoveTo(AX, AY);
 end;
@@ -744,9 +729,6 @@ begin
     FCursor.Width,
     FCursor.Height);
 end;
-
-
-// カーソル
 
 { THueCursor }
 

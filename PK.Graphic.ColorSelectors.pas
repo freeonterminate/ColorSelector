@@ -189,7 +189,6 @@ begin
   end;
 end;
 
-// カーソル
 { TSelectorCursor }
 
 constructor TSelectorCursor.Create(AOwner: TComponent);

@@ -217,8 +217,7 @@ type
   // カーソル
   TSelectorCursor = class(TCircle)
   private const
-    CURSOR_THICKNESS_RATIO = 1 / 10; // Width の 1/10
-    CUSOR_THICKNESS_MINIMUM_SIZE = 3;
+    CUSOR_THICKNESS_SIZE = 3;
   private var
     FSelector: TCustomSelector;
   protected
@@ -267,7 +266,7 @@ uses
 procedure TCustomSelector.AfterConstruction;
 begin
   inherited;
-  SetSize(500, 320);
+  SetSize(320, 320);
 end;
 
 constructor TCustomSelector.Create(AOwner: TComponent);
@@ -1239,8 +1238,7 @@ end;
 
 procedure TSelectorCursor.Update(const ASize: Single);
 begin
-  Stroke.Thickness := 
-    Max(CUSOR_THICKNESS_MINIMUM_SIZE, Width * CURSOR_THICKNESS_RATIO);
+  Stroke.Thickness := CUSOR_THICKNESS_SIZE;
 
   Width := ASize;
   Height := ASize;

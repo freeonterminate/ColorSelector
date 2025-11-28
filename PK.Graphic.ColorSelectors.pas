@@ -105,7 +105,7 @@ type
   protected
     procedure Resize; override;
     procedure Draw(const ACanvas: TCanvas); override;
-    procedure SetColor(const AValue: TAlphaColor); override;
+    procedure SetColor(const AColor: TAlphaColor); override;
     procedure MouseDown(
       AButton: TMouseButton;
       AShift: TShiftState;
@@ -148,7 +148,8 @@ type
 
   TCustomCellSelector = class(TCustomSelector)
   private const
-    CELL_CURSOR_RATIO = 0.65; // カーソルサイズ比（セル短辺に対する）
+    CURSOR_RATIO = 0.65; // カーソルサイズ比（セル短辺に対する）
+    CURSOR_MINIMUM_SIZE = 8;
   private
     FCols: Integer;
     FRows: Integer;
@@ -266,7 +267,7 @@ uses
 procedure TCustomSelector.AfterConstruction;
 begin
   inherited;
-  SetSize(320, 320);
+  SetSize(500, 320);
 end;
 
 constructor TCustomSelector.Create(AOwner: TComponent);
@@ -725,12 +726,12 @@ begin
   PreDraw;
 end;
 
-procedure TCircleSelector.SetColor(const AValue: TAlphaColor);
+procedure TCircleSelector.SetColor(const AColor: TAlphaColor);
 begin
-  if FColor = AValue then
+  if FColor = AColor then
     Exit;
 
-  FColor := AValue;
+  FColor := AColor;
   RGB2HSV(FColor, FHue, FSat, FVal);
   RedrawTriangle;
 
@@ -847,7 +848,7 @@ begin
         V := EnsureRange(1 - (NY - 0.5) * 2, 0, 1);
       end;
 
-      for var X := R.Left to R.Bottom - 1 do
+      for var X := R.Left to R.Right - 1 do
       begin
         var Hdeg := EnsureRange((X - R.Left) / W, 0, 1) * 360;
         Data.SetPixel(X, Y, HSV2RGB(Hdeg, S, V));
@@ -969,9 +970,11 @@ begin
   FCellHeight := H / FRows;
 
   // カーソルのサイズ更新
-  var Size := Min(FCellWidth, FCellHeight) * CELL_CURSOR_RATIO;
-  if Size < 8 then
-    Size := 8;
+  var Size := 
+    Max(
+      Min(FCellWidth, FCellHeight) * CURSOR_RATIO, 
+      CURSOR_MINIMUM_SIZE
+    );
 
   FCursor.Update(Size);
 
@@ -1242,6 +1245,7 @@ begin
   Width := ASize;
   Height := ASize;
 
+  // Color を強制的に設定する
   var C := FSelector.FColor;
   FSelector.FColor := C xor $ffff_ffff;
   FSelector.SetColor(C);

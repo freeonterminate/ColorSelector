@@ -47,6 +47,7 @@ type
     procedure MouseMove(
       AShift: TShiftState;
       AX, AY: Single); override;
+    procedure MouseEventHandler(const AX, AY: Single);
 
     function CellByPos(const AX, AY: Single): TPoint; virtual;
 
@@ -221,7 +222,12 @@ procedure TCustomCellSelector.MouseDown(
 begin
   inherited;
 
-  if (AButton = TMouseButton.mbLeft) and Pressed then
+  MouseEventHandler(AX, AY);
+end;
+
+procedure TCustomCellSelector.MouseEventHandler(const AX, AY: Single);
+begin
+  if Pressed then
     FCursor.MoveTo(AX, AY);
 end;
 
@@ -230,8 +236,7 @@ procedure TCustomCellSelector.MouseMove(
 begin
   inherited;
 
-  if Pressed then
-    FCursor.MoveTo(AX, AY);
+  MouseEventHandler(AX, AY);
 end;
 
 procedure TCustomCellSelector.SetColor(const AColor: TAlphaColor);

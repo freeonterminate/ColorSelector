@@ -4,8 +4,9 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, PK.Graphic.ColorSelectors,
-  FMX.Effects, FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls, FMX.Colors;
+  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
+  FMX.Effects, FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls, FMX.Colors
+  ,PK.Graphic.HSVSelectors, PK.Graphic.CellSelectors, PK.Graphic.ColorSelectors;
 
 type
   TForm1 = class(TForm)

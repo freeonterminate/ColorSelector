@@ -6,12 +6,21 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Effects, FMX.Objects, FMX.Controls.Presentation, FMX.StdCtrls, FMX.Colors
-  ,PK.Graphic.HSVSelectors, PK.Graphic.CellSelectors, PK.Graphic.ColorSelectors;
+  ,PK.Graphic.HSVSelectors, PK.Graphic.CellSelectors, PK.Graphic.ColorSelectors,
+  PK.Graphic.ColorBar, FMX.MaskEdit, FMX.Edit;
 
 type
   TForm1 = class(TForm)
     Button1: TButton;
     Image1: TImage;
+    StyleBook1: TStyleBook;
+    Panel1: TPanel;
+    CalloutPanel1: TCalloutPanel;
+    Edit1: TEdit;
+    MaskEdit1: TMaskEdit;
+    StyleBook2: TStyleBook;
+    StyleBook3: TStyleBook;
+    ProgressBar1: TProgressBar;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -20,6 +29,7 @@ type
     FRectSelector: TRectSelector;
     F16Selector: T16CellSelector;
     F128Selector: T128CellSelector;
+    FRGBBars: TRGBBars;
   public
     procedure SelectorChange(Sender: TObject; const AColor: TAlphaColor);
   end;
@@ -66,6 +76,11 @@ begin
   F128Selector.OnChange := SelectorChange;
   F128Selector.Parent := Self;
 
+  FRGBBars := TRGBBars.Create(Self);
+  FRGBBars.Position.Point := PointF(330, 100);
+  FRGBBars.Parent := Self;
+  FRGBBars.OnChange := SelectorChange;
+
   //Log.d('');
 end;
 
@@ -84,7 +99,10 @@ begin
     [FCircleSelector, FRectSelector, F16Selector, F128Selector]
   do
     if S <> Sender then
-      S.SetColorWihtoutEvent(AColor);
+      S.SetColorWithoutEvent(AColor);
+
+  if Sender <> FRGBBars then
+    FRGBBars.SetColorWithoutEvent(AColor);
 end;
 
 end.

@@ -9,7 +9,8 @@ uses
   PK.Graphic.ColorConverter in 'Lib\PK.Graphic.ColorConverter.pas',
   PK.Math.AdjustUtils in 'Lib\PK.Math.AdjustUtils.pas',
   PK.Graphic.HSVSelectors in 'PK.Graphic.HSVSelectors.pas',
-  PK.Graphic.CellSelectors in 'PK.Graphic.CellSelectors.pas';
+  PK.Graphic.CellSelectors in 'PK.Graphic.CellSelectors.pas',
+  PK.Graphic.ColorBar in 'PK.Graphic.ColorBar.pas';
 
 {$R *.res}
 

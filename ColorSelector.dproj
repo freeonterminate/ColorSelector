@@ -311,6 +311,7 @@
         <DCCReference Include="Lib\PK.Math.AdjustUtils.pas"/>
         <DCCReference Include="PK.Graphic.HSVSelectors.pas"/>
         <DCCReference Include="PK.Graphic.CellSelectors.pas"/>
+        <DCCReference Include="PK.Graphic.ColorBar.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

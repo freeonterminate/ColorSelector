@@ -10,7 +10,6 @@ uses
   , FMX.Controls
   , FMX.Graphics
   , FMX.Objects
-  , FMX.Types
   ;
 
 type
@@ -45,7 +44,7 @@ type
     destructor Destroy; override;
     procedure AfterConstruction; override;
 
-    procedure SetColorWihtoutEvent(const AColor: TAlphaColor);
+    procedure SetColorWithoutEvent(const AColor: TAlphaColor);
 
     property BaseColor: TAlphaColor
       read FBaseColor
@@ -73,12 +72,7 @@ type
 implementation
 
 uses
-  System.Math
-  , System.UIConsts
-  , FMX.Effects
-  , PK.Graphic.ColorConverter
-  , PK.Math.AdjustUtils
-  , PK.Utils.Log
+  FMX.Effects
   ;
 
 { TCustomSelector }
@@ -168,7 +162,7 @@ begin
   DoChange;
 end;
 
-procedure TCustomSelector.SetColorWihtoutEvent(const AColor: TAlphaColor);
+procedure TCustomSelector.SetColorWithoutEvent(const AColor: TAlphaColor);
 begin
   FNoEvent := True;
   SetColor(AColor);

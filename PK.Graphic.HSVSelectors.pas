@@ -7,9 +7,7 @@ uses
   , System.SysUtils
   , System.UITypes
   , System.Types
-  , FMX.Controls
   , FMX.Graphics
-  , FMX.Objects
   , FMX.Types
   , PK.Graphic.ColorSelectors
   ;
@@ -157,10 +155,7 @@ implementation
 
 uses
   System.Math
-  , System.UIConsts
-  , FMX.Effects
   , PK.Graphic.ColorConverter
-  , PK.Math.AdjustUtils
   , PK.Utils.Log
   ;
 
@@ -745,8 +740,9 @@ begin
     X := FCX + FHueRadius * C;
     Y := FCY + FHueRadius * S;
 
-    FHue := RadToDeg(Theta);
-    Adjust360(FHue);
+    FHue := FMod(RadToDeg(Theta), 360);
+    if (FHue < 0) then
+      FHue := FHue + 360;
 
     CalcColor;
     RedrawTriangle;
